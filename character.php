@@ -15,28 +15,28 @@ $taker = array(
 		'int' => 1, 'cha' => 1, 'wil' => 1,
 	),
 	'skills' => array(
-		'unarmed' => 1,
-		'melee' => 1,
-		'resistance' => 1,
-		'shoot' => 1,
-		'stealth' => 1,
-		'athletics' => 1,
-		'awareness' => 1,
-		'self-control' => 1,
-		'scavenging' => 1,
-		'drive' => 1,
-		'criminality' => 1,
-		'foresight' => 1,
-		'research' => 1,
-		'mechanics' => 1,
-		'firstaid' => 1,
-		'profession' => 1,
-		'networking' => 1,
-		'persuasion' => 1,
-		'sensitivity' => 1,
-		'deception' => 1,
-		'intimidation' => 1,
-		'leadership' => 1,
+		'unarmed'		=> array( 'str', 0 ),
+		'melee'			=> array( 'str', 0 ),
+		'resistance'	=> array( 'str', 0 ),
+		'shoot'			=> array( 'spd', 0 ),
+		'stealth'		=> array( 'spd', 0 ),
+		'athletics'		=> array( 'spd', 0 ),
+		'awareness'		=> array( 'adp', 0 ),
+		'self-control'	=> array( 'adp', 0 ),
+		'scavenging'	=> array( 'adp', 0 ),
+		'drive'			=> array( 'adp', 0 ),
+		'criminality'	=> array( 'adp', 0 ),
+		'foresight'		=> array( 'int', 0 ),
+		'research'		=> array( 'int', 0 ),
+		'mechanics'		=> array( 'int', 0 ),
+		'firstaid'		=> array( 'int', 0 ),
+		'profession'	=> array( 'int', 0 ),
+		'networking'	=> array( 'cha', 0 ),
+		'persuasion'	=> array( 'cha', 0 ),
+		'sensitivity'	=> array( 'cha', 0 ),
+		'deception'		=> array( 'cha', 0 ),
+		'intimidation'	=> array( 'cha', 0 ),
+		'leadership'	=> array( 'cha', 0 ),
 	),
 	'dependants' => array(),
 );
@@ -51,6 +51,37 @@ $taker['name'] = choose( $first_names ) . ' ' . choose( $last_names );
 $taker['weak_spot'] = choose( $disadvantages );
 $taker['soft_spot'] = choose( $convictions );
 $taker['tough_spot'] = choose( $toughspots );
+
+for ( $i = 0; $i < 5; $i += 1 ) {
+	$pot = choose( array_keys( $taker[ 'potential' ] ) );
+	$taker[ 'potential' ][ $pot ] += 1;
+}
+
+$i = 0;
+$skill_spend = 20;
+while ( $i < $skill_spend ) {
+	$key = choose( array_keys( $taker[ 'skills' ] ) );
+	$skill = $taker[ 'skills' ][ $key ];
+	$n = $skill[ 1 ] + 1;
+
+	if ( $taker[ 'potential' ][ $skill[ 0 ] ] < $n ) {
+		continue;
+	}
+
+	$cost = ( $n * ( $n + 1 ) ) / 2;
+
+	if ( $i + $cost > $skill_spend ) {
+		continue;
+	}
+
+	$taker[ 'skills' ][ $key ][ 1 ] += 1;
+
+	if ( $cost < 1 ) {
+		$cost = 1;
+	}
+
+	$i += $cost;
+}
 
 ?>
 <html>
@@ -106,78 +137,78 @@ table.stagger_skill tr:nth-child(odd) td.skill {
 <table class="table stagger_skill">
 	<tr>
 		<td rowspan="3">STR: <?php echo $taker['potential']['str']; ?></td>
-		<td class="skill">Unarmed: <?php echo $taker['skills']['unarmed']; ?></td>
+		<td class="skill">Unarmed: <?php echo $taker['skills']['unarmed'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Melee: <?php echo $taker['skills']['melee']; ?></td>
+		<td class="skill">Melee: <?php echo $taker['skills']['melee'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Resistance: <?php echo $taker['skills']['resistance']; ?></td>
+		<td class="skill">Resistance: <?php echo $taker['skills']['resistance'][1]; ?></td>
 	</tr>
 
 	<tr>
 		<td rowspan="3">SPD: <?php echo $taker['potential']['spd']; ?></td>
-		<td class="skill">Shoot: <?php echo $taker['skills']['shoot']; ?></td>
+		<td class="skill">Shoot: <?php echo $taker['skills']['shoot'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Stealth: <?php echo $taker['skills']['stealth']; ?></td>
+		<td class="skill">Stealth: <?php echo $taker['skills']['stealth'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Athletics: <?php echo $taker['skills']['athletics']; ?></td>
+		<td class="skill">Athletics: <?php echo $taker['skills']['athletics'][1]; ?></td>
 	</tr>
 
 	<tr>
 		<td rowspan="5">ADP: <?php echo $taker['potential']['adp']; ?></td>
-		<td class="skill">Awareness: <?php echo $taker['skills']['awareness']; ?></td>
+		<td class="skill">Awareness: <?php echo $taker['skills']['awareness'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Self-Control: <?php echo $taker['skills']['self-control']; ?></td>
+		<td class="skill">Self-Control: <?php echo $taker['skills']['self-control'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Scavenging: <?php echo $taker['skills']['scavenging']; ?></td>
+		<td class="skill">Scavenging: <?php echo $taker['skills']['scavenging'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Drive: <?php echo $taker['skills']['drive']; ?></td>
+		<td class="skill">Drive: <?php echo $taker['skills']['drive'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Criminality: <?php echo $taker['skills']['criminality']; ?></td>
+		<td class="skill">Criminality: <?php echo $taker['skills']['criminality'][1]; ?></td>
 	</tr>
 
 	<tr>
 		<td rowspan="5">INT: <?php echo $taker['potential']['int']; ?></td>
-		<td class="skill">Foresight: <?php echo $taker['skills']['foresight']; ?></td>
+		<td class="skill">Foresight: <?php echo $taker['skills']['foresight'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Research: <?php echo $taker['skills']['research']; ?></td>
+		<td class="skill">Research: <?php echo $taker['skills']['research'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Mechanics: <?php echo $taker['skills']['mechanics']; ?></td>
+		<td class="skill">Mechanics: <?php echo $taker['skills']['mechanics'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">First Aid: <?php echo $taker['skills']['firstaid']; ?></td>
+		<td class="skill">First Aid: <?php echo $taker['skills']['firstaid'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Profession: <?php echo $taker['skills']['profession']; ?></td>
+		<td class="skill">Profession: <?php echo $taker['skills']['profession'][1]; ?></td>
 	</tr>
 
 	<tr>
 		<td rowspan="6">CHA: <?php echo $taker['potential']['cha']; ?></td>
-		<td class="skill">Networking: <?php echo $taker['skills']['networking']; ?></td>
+		<td class="skill">Networking: <?php echo $taker['skills']['networking'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Persuasion: <?php echo $taker['skills']['persuasion']; ?></td>
+		<td class="skill">Persuasion: <?php echo $taker['skills']['persuasion'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Sensitivity: <?php echo $taker['skills']['sensitivity']; ?></td>
+		<td class="skill">Sensitivity: <?php echo $taker['skills']['sensitivity'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Deception: <?php echo $taker['skills']['deception']; ?></td>
+		<td class="skill">Deception: <?php echo $taker['skills']['deception'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Intimidation: <?php echo $taker['skills']['intimidation']; ?></td>
+		<td class="skill">Intimidation: <?php echo $taker['skills']['intimidation'][1]; ?></td>
 	</tr>
 	<tr>
-		<td class="skill">Leadership: <?php echo $taker['skills']['leadership']; ?></td>
+		<td class="skill">Leadership: <?php echo $taker['skills']['leadership'][1]; ?></td>
 	</tr>
 
 	<tr>
